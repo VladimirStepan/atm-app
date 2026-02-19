@@ -1,3 +1,15 @@
 spring:
   application:
     name: atm-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/atm_service
+    username: atm
+    password: atm
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
