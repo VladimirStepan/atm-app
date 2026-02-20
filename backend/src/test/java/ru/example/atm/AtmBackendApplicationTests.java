@@ -9,5 +9,4 @@ class AtmBackendApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
