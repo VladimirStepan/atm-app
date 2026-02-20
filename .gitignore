@@ -54,3 +54,11 @@ jacoco.exec
 
 ### Github ###
 .cache/
+
+### Local secrets ###
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+!backend/.env.example

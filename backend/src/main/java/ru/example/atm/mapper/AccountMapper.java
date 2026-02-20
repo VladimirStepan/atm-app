@@ -6,12 +6,12 @@ import ru.example.atm.dto.AccountResponseDto;
 import ru.example.atm.dto.AccountUpdateDto;
 import ru.example.atm.entity.AccountEntity;
 
-@Mapper(componentModel = "sspring")
+@Mapper(componentModel = "spring")
 public interface AccountMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updateAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "accountStatus", ignore = true)
     AccountEntity toEntity(AccountCreateDto accountCreateDto);
 
@@ -20,6 +20,6 @@ public interface AccountMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updateAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     void updateEntity(AccountUpdateDto dto, @MappingTarget AccountEntity entity);
 }
