@@ -5,6 +5,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/atm_service
     username: atm
     password: atm
+  jackson:
+    mapper:
+      accept-case-insensitive-enums: true
   jpa:
     generate-ddl: true
     hibernate:
