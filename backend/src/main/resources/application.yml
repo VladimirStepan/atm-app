@@ -1,4 +1,5 @@
-
+server:
+  port: 8084
 spring:
 #  config:
 #    import: optional:file:.env[.properties]
@@ -19,5 +20,3 @@ spring:
     properties:
       hibernate:
         format_sql: true
-server:
-  port: 8084
