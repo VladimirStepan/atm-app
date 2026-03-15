@@ -16,7 +16,12 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "accounts")
+@Table(
+        name = "accounts",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_accounts_owner_name", columnNames = "owner_name")
+        }
+)
 public class AccountEntity {
 
     @Id
@@ -24,7 +29,7 @@ public class AccountEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "owner_name", nullable = false)
     private String ownerName;
 
     @Column(nullable = false)

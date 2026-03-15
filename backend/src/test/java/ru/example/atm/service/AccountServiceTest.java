@@ -11,6 +11,7 @@ import ru.example.atm.dto.AccountUpdateDto;
 import ru.example.atm.entity.AccountEntity;
 import ru.example.atm.enums.AccountStatus;
 import ru.example.atm.enums.CurrencyCode;
+import ru.example.atm.exception.AlreadyExistsException;
 import ru.example.atm.exception.NotFoundException;
 import ru.example.atm.mapper.AccountMapper;
 import ru.example.atm.repo.AccountRepository;
@@ -49,6 +50,7 @@ class AccountServiceTest {
                 1L, "Ivan", new BigDecimal("100.00"), CurrencyCode.RUB, AccountStatus.ACTIVE, Instant.now(), Instant.now()
         );
 
+        when(accountRepository.existsByOwnerNameIgnoreCase("Ivan")).thenReturn(false);
         when(accountMapper.toEntity(request)).thenReturn(toSave);
         when(accountRepository.save(toSave)).thenReturn(saved);
         when(accountMapper.toResponse(saved)).thenReturn(expected);
@@ -59,6 +61,18 @@ class AccountServiceTest {
         assertEquals(AccountStatus.ACTIVE, toSave.getAccountStatus());
         verify(accountRepository).save(toSave);
         verify(accountMapper).toResponse(saved);
+    }
+
+    @Test
+    void createAccountShouldThrowWhenOwnerNameAlreadyExists() {
+        AccountCreateDto request = new AccountCreateDto("Ivan", new BigDecimal("100.00"), CurrencyCode.RUB);
+        when(accountRepository.existsByOwnerNameIgnoreCase("Ivan")).thenReturn(true);
+
+        AlreadyExistsException ex = assertThrows(AlreadyExistsException.class, () -> accountService.createAccount(request));
+
+        assertEquals("Account already exists: ownerName = Ivan", ex.getMessage());
+        verify(accountRepository).existsByOwnerNameIgnoreCase("Ivan");
+        verifyNoInteractions(accountMapper);
     }
 
     @Test
@@ -118,6 +132,7 @@ class AccountServiceTest {
         );
 
         when(accountRepository.findById(7L)).thenReturn(Optional.of(existing));
+        when(accountRepository.existsByOwnerNameIgnoreCaseAndIdNot("New Name", 7L)).thenReturn(false);
         when(accountRepository.save(existing)).thenReturn(existing);
         when(accountMapper.toResponse(existing)).thenReturn(expected);
 
@@ -126,6 +141,20 @@ class AccountServiceTest {
         assertSame(expected, actual);
         verify(accountMapper).updateEntity(request, existing);
         verify(accountRepository).save(existing);
+    }
+
+    @Test
+    void updateShouldThrowWhenOwnerNameAlreadyExists() {
+        AccountUpdateDto request = new AccountUpdateDto("Taken Name", null, null, null);
+        AccountEntity existing = new AccountEntity();
+        existing.setId(7L);
+        when(accountRepository.findById(7L)).thenReturn(Optional.of(existing));
+        when(accountRepository.existsByOwnerNameIgnoreCaseAndIdNot("Taken Name", 7L)).thenReturn(true);
+
+        AlreadyExistsException ex = assertThrows(AlreadyExistsException.class, () -> accountService.update(7L, request));
+
+        assertEquals("Account already exists: ownerName = Taken Name", ex.getMessage());
+        verify(accountRepository).existsByOwnerNameIgnoreCaseAndIdNot("Taken Name", 7L);
     }
 
     @Test

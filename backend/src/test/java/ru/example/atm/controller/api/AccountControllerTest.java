@@ -13,12 +13,14 @@ import ru.example.atm.controller.exception.GlobalExceptionHandler;
 import ru.example.atm.dto.AccountResponseDto;
 import ru.example.atm.enums.AccountStatus;
 import ru.example.atm.enums.CurrencyCode;
+import ru.example.atm.exception.AlreadyExistsException;
 import ru.example.atm.exception.NotFoundException;
 import ru.example.atm.service.AccountService;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+import static org.hamcrest.Matchers.endsWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -66,7 +68,7 @@ class AccountControllerTest {
                                 }
                                 """))
                 .andExpect(status().isCreated())
-                .andExpect(header().string("Location", "/api/accounts/1"))
+                .andExpect(header().string("Location", endsWith("/api/v1/atm/1")))
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.ownerName").value("Ivan"))
                 .andExpect(jsonPath("$.currency").value("rub"))
@@ -138,6 +140,23 @@ class AccountControllerTest {
         mockMvc.perform(get("/api/v1/atm/404"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error").value("Account not found: id=404"));
+    }
+
+    @Test
+    void shouldReturn409WhenServiceThrowsAlreadyExists() throws Exception {
+        when(accountService.createAccount(any())).thenThrow(new AlreadyExistsException("Account already exists: ownerName=Ivan"));
+
+        mockMvc.perform(post("/api/v1/atm")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "ownerName":"Ivan",
+                                  "balance":1200.00,
+                                  "currency":"rub"
+                                }
+                                """))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.error").value("Account already exists: ownerName=Ivan"));
     }
 
     @Test

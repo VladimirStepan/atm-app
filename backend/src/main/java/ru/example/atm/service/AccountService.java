@@ -10,6 +10,7 @@ import ru.example.atm.dto.AccountResponseDto;
 import ru.example.atm.dto.AccountUpdateDto;
 import ru.example.atm.entity.AccountEntity;
 import ru.example.atm.enums.AccountStatus;
+import ru.example.atm.exception.AlreadyExistsException;
 import ru.example.atm.exception.NotFoundException;
 import ru.example.atm.mapper.AccountMapper;
 import ru.example.atm.repo.AccountRepository;
@@ -25,9 +26,12 @@ public class AccountService {
     private final AccountMapper accountMapper;
 
     private static final String ACCOUNT_NOT_FOUND_MESSAGE = "Account not found: id=";
+    private static final String ACCOUNT_ALREADY_EXISTS_MESSAGE = "Account already exists: ownerName = ";
 
     @Transactional
     public AccountResponseDto createAccount(@Valid AccountCreateDto accountCreateDto) {
+        ensureOwnerNameUnique(accountCreateDto.ownerName(), null);
+
         AccountEntity entity = accountMapper.toEntity(accountCreateDto);
         entity.setAccountStatus(AccountStatus.ACTIVE);
 
@@ -53,6 +57,10 @@ public class AccountService {
         AccountEntity entity = accountRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(ACCOUNT_NOT_FOUND_MESSAGE + id));
 
+        if (request.ownerName() != null) {
+            ensureOwnerNameUnique(request.ownerName(), id);
+        }
+
         accountMapper.updateEntity(request, entity);
 
         AccountEntity saved = accountRepository.save(entity);
@@ -65,5 +73,14 @@ public class AccountService {
             throw new NotFoundException(ACCOUNT_NOT_FOUND_MESSAGE + id);
         }
         accountRepository.deleteById(id);
+    }
+
+    private void ensureOwnerNameUnique(String ownerName, Long currentId) {
+        boolean exists = currentId == null
+                ? accountRepository.existsByOwnerNameIgnoreCase(ownerName)
+                : accountRepository.existsByOwnerNameIgnoreCaseAndIdNot(ownerName, currentId);
+        if (exists) {
+            throw new AlreadyExistsException(ACCOUNT_ALREADY_EXISTS_MESSAGE + ownerName);
+        }
     }
 }

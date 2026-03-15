@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: atm-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-atm_service}
+      POSTGRES_USER: ${POSTGRES_USER:-atm}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-atm}
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-atm} -d ${POSTGRES_DB:-atm_service}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: atm-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-atm_service}
+      DB_USERNAME: ${POSTGRES_USER:-atm}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-atm}
+    ports:
+      - "${BACKEND_PORT:-8084}:8084"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

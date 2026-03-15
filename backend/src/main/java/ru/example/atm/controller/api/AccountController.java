@@ -21,7 +21,7 @@ public class AccountController {
     @PostMapping
     public ResponseEntity<?> createAccount(@RequestBody AccountCreateDto accountCreateDto) {
         AccountResponseDto accountResponseDto = accountService.createAccount(accountCreateDto);
-        return ResponseEntity.created(URI.create("/api/accounts/" + accountResponseDto.id()))
+        return ResponseEntity.created(URI.create("/api/v1/atm/" + accountResponseDto.id()))
                 .body(accountResponseDto);
     }
 

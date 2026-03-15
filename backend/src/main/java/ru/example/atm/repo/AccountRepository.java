@@ -6,4 +6,7 @@ import ru.example.atm.entity.AccountEntity;
 
 @Repository
 public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
+    boolean existsByOwnerNameIgnoreCase(String ownerName);
+
+    boolean existsByOwnerNameIgnoreCaseAndIdNot(String ownerName, Long id);
 }
