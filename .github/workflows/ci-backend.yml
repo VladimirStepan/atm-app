@@ -1,4 +1,7 @@
 name: Backend CI
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   push:
     branches:
@@ -10,7 +13,7 @@ on:
     branches:
       - main
     paths:
-      - "../../backend"
+      - "backend/**"
       - ".github/workflows/ci-backend.yml"
   workflow_dispatch:
 
