@@ -1,0 +1,39 @@
+---
+- name: Deploy backend + postgres using Docker Compose
+  hosts: vm
+  become: true
+
+  tasks:
+    - name: Ensure app directory exists
+      ansible.builtin.file:
+        path: "{{ app_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Render compose file
+      ansible.builtin.template:
+        src: templates/docker-compose.backend.yml.j2
+        dest: "{{ app_dir }}/docker-compose.yml"
+        mode: "0644"
+
+    - name: Render environment file
+      ansible.builtin.template:
+        src: templates/backend.env.j2
+        dest: "{{ app_dir }}/.env"
+        mode: "0600"
+
+    - name: Login to Yandex Container Registry
+      ansible.builtin.command:
+        cmd: docker login --username oauth --password {{ yc_oauth_token }} cr.yandex
+      no_log: true
+      when: yc_oauth_token | length > 0
+
+    - name: Pull images
+      ansible.builtin.command:
+        cmd: docker compose --env-file .env pull
+        chdir: "{{ app_dir }}"
+
+    - name: Start services
+      ansible.builtin.command:
+        cmd: docker compose --env-file .env up -d
+        chdir: "{{ app_dir }}"

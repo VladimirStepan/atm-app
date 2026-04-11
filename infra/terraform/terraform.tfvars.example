@@ -1,0 +1,15 @@
+yc_token       = "<YC_TOKEN_HERE>."
+cloud_id       = "b1gxxxxxxxxxxxxxxx"
+folder_id      = "b1gxxxxxxxxxxxxxxx"
+zone           = "ru-central1-a"
+network_name   = "atm-network"
+subnet_name    = "atm-subnet"
+subnet_cidr    = "10.10.0.0/24"
+vm_name        = "atm-vm"
+vm_cores       = 2
+vm_memory      = 2
+core_fraction  = 20
+disk_size_gb   = 20
+image_family   = "ubuntu-2204-lts"
+ssh_user       = "ubuntu"
+ssh_public_key = "ssh-ed25519 AAAAC3NzaC1lZD... user@host"

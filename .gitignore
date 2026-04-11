@@ -63,19 +63,18 @@ backend/.env
 backend/.env.*
 !backend/.env.example
 
-infra/ansible/inventory.ini
-infra/ansible/group_vars/all.yml
-
 ### OS files ###
 .DS_Store
 
 ### Infra sensitive/local state ###
-infra/**/terraform.tfvars
-infra/**/*.auto.tfvars
-infra/**/*.tfstate
-infra/**/*.tfstate.*
-infra/**/inventory.ini
-infra/**/group_vars/all.yml
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/*.tfplan
+**/terraform.tfvars
+**/*.auto.tfvars
+**/inventory.ini
+**/group_vars/all.yml
 
 ### Local helper files ###
 backend/src/main/resources/test_command

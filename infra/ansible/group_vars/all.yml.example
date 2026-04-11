@@ -1,0 +1,18 @@
+app_dir: /opt/atm-app
+
+# Yandex Container Registry
+registry_id: "crp0000000000000000"
+backend_image: "atm-backend"
+backend_tag: "latest"
+
+# Postgres
+postgres_db: "change_me"
+postgres_user: "change_me"
+postgres_password: "change_me"
+postgres_public_port: 5433
+
+# Backend
+backend_public_port: 8084
+
+# Token for docker login to cr.yandex (OAuth token from YC)
+yc_oauth_token: ""
