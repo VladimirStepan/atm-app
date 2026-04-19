@@ -78,3 +78,14 @@ backend/.env.*
 
 ### Local helper files ###
 backend/src/main/resources/test_command
+
+### Load testing artifacts ###
+backend/logs/
+backend/tank_errors.log
+backend/load.yaml
+
+### K8s local secrets (keep local, commit only examples) ###
+k8s/lab3/**/backend-secret.yaml
+k8s/lab3/**/postgres-secret.yaml
+!k8s/lab3/**/backend-secret.yaml.example
+!k8s/lab3/**/postgres-secret.yaml.example

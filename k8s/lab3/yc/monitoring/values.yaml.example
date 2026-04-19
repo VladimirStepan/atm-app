@@ -1,0 +1,24 @@
+alertmanager:
+  enabled: false
+
+grafana:
+  adminPassword: change_me
+  persistence:
+    enabled: false
+  service:
+    type: ClusterIP
+
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+
+# В Managed Kubernetes control-plane метрики часто недоступны из воркер-нод.
+# Отключаем их, чтобы не было постоянных "down" targets.
+kubeEtcd:
+  enabled: false
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false

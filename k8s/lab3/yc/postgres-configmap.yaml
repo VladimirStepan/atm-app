@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: atm-lab3
+data:
+  POSTGRES_DB: atm_service
+  POSTGRES_USER: atm
