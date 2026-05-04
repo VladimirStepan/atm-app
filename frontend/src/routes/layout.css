@@ -1,0 +1,12 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+@plugin "daisyui";
+
+*, *:focus, *:active {
+    outline: none;
+}
+
+select {
+    border-color: oklab(0.97807 -0.00659901 -0.0282392 / 0.2);
+}
