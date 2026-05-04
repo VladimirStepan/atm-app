@@ -1,27 +1,20 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { page } from "$app/state";
-  import { currencyToId, idToCurrency, type CurrencyCode, type Currency } from "$lib/currency";
+  import { accountToFormData, fetchAccount, updateAccount } from "$lib/accounts";
+  import { idToCurrency } from "$lib/currency";
 
     let { params } = $props();
 
     const id = $derived(page.url.searchParams.get('id'));
 
-    const account: Account = $derived(await fetch(`http://localhost:8084/api/v1/atm/${id}`).then(_ => _.json()));
-    const accountFormDataInitialValue = $derived({
-        ownerName: account.ownerName,
-        balance: account.balance,
-        accountStatus: account.accountStatus,
-        currency: currencyToId[account.currency] });
+    const account: Account = $derived(await fetchAccount(id));
+    const accountFormDataInitialValue = $derived(accountToFormData(account));
 
     const accountFormData = $state((() => accountFormDataInitialValue)());
 
     async function confirmChanges() {
-        await fetch(`http://localhost:8084/api/v1/atm/${id}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(accountFormData) });
-
+        await updateAccount(id, accountFormData);
         await goto('#/');
     }
 </script>

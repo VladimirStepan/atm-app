@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import { createAccount, deleteAccount as deleteAccountById, fetchAccounts } from "$lib/accounts";
   import { statusCodeToName } from "$lib/localization";
 
     let confirmAccountDeleteModal: HTMLDialogElement;
@@ -10,15 +11,11 @@
         ownerName: undefined, balance: undefined, currency: undefined });
 
     async function refreshAccounts() {
-        accounts = await fetch('http://localhost:8084/api/v1/atm').then(_ => _.json());
+        accounts = await fetchAccounts();
     }
     
     async function addAccount() {
-        await fetch('http://localhost:8084/api/v1/atm', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(addAccountFormData) });
-        
+        await createAccount(addAccountFormData);
         await refreshAccounts();
     }
 
@@ -28,7 +25,7 @@
     }
 
     async function deleteAccount() {
-        await fetch(`http://localhost:8084/api/v1/atm/${accountToDelete.id}`, { method: 'DELETE' });
+        await deleteAccountById(accountToDelete.id);
         await refreshAccounts();
     }
 
