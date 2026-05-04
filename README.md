@@ -1,8 +1,8 @@
 # ATM App
 
-Backend-сервис ATM на `Spring Boot` + `PostgreSQL` с CRUD API для аккаунтов.
+Backend-сервис ATM на `Spring Boot` + `SvelteKit` + `PostgreSQL` с CRUD API для аккаунтов.
 Проект содержит:
-- приложение (`backend`)
+- приложение (`backend`, `frontend`)
 - docker-окружение для локального запуска
 - `infra` (Terraform + Ansible) для деплоя
 
@@ -11,6 +11,8 @@ Backend-сервис ATM на `Spring Boot` + `PostgreSQL` с CRUD API для а
 - Spring Boot 4
 - Spring Data JPA
 - PostgreSQL
+- Svelte 5 / SvelteKit 2
+- TypeScript 6
 - Docker / Docker Compose
 - JUnit 5 + Mockito + MockMvc + JaCoCo
 
@@ -18,6 +20,7 @@ Backend-сервис ATM на `Spring Boot` + `PostgreSQL` с CRUD API для а
 ```text
 atm-app/
   backend/           # Spring Boot backend
+  frontend/          # SvelteKit frontend
   infra/terraform/   # IaC для VM в Yandex Cloud
   infra/ansible/     # Установка Docker и деплой backend
   docker-compose.yml # Локальный запуск postgres + backend
@@ -55,6 +58,21 @@ DB_PASSWORD=change_me \
 ```
 
 `application.yml` читает переменные `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`.
+
+## Локальная сборка/тестирование frontend (без контейнера frontend)
+
+Отладка:
+```bash
+npm run dev
+```
+
+Сборка:
+```
+npm run build
+```
+
+Запуск собранной версии:
+- открыть `build/index.html` в браузере
 
 ## API
 Base URL: `http://localhost:8084/api/v1/atm`
