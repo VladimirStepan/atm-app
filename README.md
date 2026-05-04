@@ -56,6 +56,21 @@ DB_PASSWORD=change_me \
 
 `application.yml` читает переменные `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`.
 
+## Локальный запуск frontend (без контейнера frontend)
+
+Отладка:
+```bash
+npm run dev
+```
+
+Сборка:
+```
+npm run build
+```
+
+Запуск собранной версии:
+- открыть `build/index.html` в браузере
+
 ## API
 Base URL: `http://localhost:8084/api/v1/atm`
 
