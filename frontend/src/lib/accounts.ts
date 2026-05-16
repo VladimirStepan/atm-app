@@ -1,6 +1,6 @@
 import { currencyToId, type CurrencyCode } from './currency';
 
-export const ATM_API_URL = 'http://localhost:8084/api/v1/atm';
+export const ATM_API_URL = `${window.location.protocol}//${window.location.hostname}:8084/api/v1/atm`;
 
 export type AccountId = Account['id'] | string | null;
 

@@ -89,3 +89,5 @@ k8s/lab3/**/backend-secret.yaml
 k8s/lab3/**/postgres-secret.yaml
 !k8s/lab3/**/backend-secret.yaml.example
 !k8s/lab3/**/postgres-secret.yaml.example
+k8s/lab3/**/monitoring/values.yaml
+!k8s/lab3/**/monitoring/values.yaml.example

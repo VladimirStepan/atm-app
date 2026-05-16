@@ -4,7 +4,9 @@ alertmanager:
 grafana:
   adminPassword: change_me
   persistence:
-    enabled: false
+    enabled: true
+    storageClassName: yc-network-hdd
+    size: 2Gi
   service:
     type: ClusterIP
 
@@ -13,6 +15,15 @@ prometheus:
     serviceMonitorSelectorNilUsesHelmValues: false
     podMonitorSelectorNilUsesHelmValues: false
     ruleSelectorNilUsesHelmValues: false
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: yc-network-hdd
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 8Gi
 
 # В Managed Kubernetes control-plane метрики часто недоступны из воркер-нод.
 # Отключаем их, чтобы не было постоянных "down" targets.

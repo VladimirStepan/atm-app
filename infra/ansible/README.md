@@ -1,9 +1,9 @@
-# Ansible (Docker install + backend deploy)
+# Ansible (Docker install + app deploy)
 
 ## 1. Prepare files
 1. Copy `inventory.ini.example` to `inventory.ini` and set VM IP.
 2. Copy `group_vars/all.yml.example` to `group_vars/all.yml`.
-3. Fill `registry_id`, image name/tag, DB vars, and `yc_oauth_token`.
+3. Fill `registry_id`, backend/frontend image names/tags, DB vars, and `yc_oauth_token`.
 
 ## 2. Install Docker on VM
 ```bash
@@ -11,7 +11,7 @@ cd infra/ansible
 ansible-playbook -i inventory.ini install-docker.yml
 ```
 
-## 3. Deploy backend + postgres
+## 3. Deploy backend + frontend + postgres
 ```bash
 ansible-playbook -i inventory.ini deploy-backend.yml
 ```

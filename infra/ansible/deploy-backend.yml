@@ -1,5 +1,5 @@
 ---
-- name: Deploy backend + postgres using Docker Compose
+- name: Deploy backend + frontend + postgres using Docker Compose
   hosts: vm
   become: true
 
