@@ -15,7 +15,6 @@ spec:
     spec:
       containers:
         - name: backend
-          # Замени REGISTRY_ID на твой ID реестра в Yandex Cloud
           image: cr.yandex/REGISTRY_ID/atm-backend:lab3
           ports:
             - containerPort: 8084

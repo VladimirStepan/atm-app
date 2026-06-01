@@ -5,8 +5,9 @@ resources:
   - namespace.yaml
   - postgres-configmap.yaml
   - postgres-secret.yaml
-  - postgres-deployment.yaml
   - postgres-service.yaml
+  - postgres-headless-service.yaml
+  - postgres-statefulset.yaml
   - backend-configmap.yaml
   - backend-secret.yaml
   - backend-deployment.yaml

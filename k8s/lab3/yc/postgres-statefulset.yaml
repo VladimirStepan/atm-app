@@ -1,9 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: postgres
   namespace: atm-lab3
 spec:
+  serviceName: postgres-headless
   replicas: 1
   selector:
     matchLabels:
@@ -17,13 +18,13 @@ spec:
         - name: postgres
           image: postgres:16-alpine
           ports:
-            - containerPort: 5432
+            - name: postgres
+              containerPort: 5432
           envFrom:
             - configMapRef:
                 name: postgres-config
             - secretRef:
                 name: postgres-secret
-          # Для п.1-2 используем ephemeral storage, чтобы не зависеть от StorageClass
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
@@ -43,6 +44,20 @@ spec:
                 - pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB"
             initialDelaySeconds: 20
             periodSeconds: 10
-      volumes:
-        - name: postgres-storage
-          emptyDir: {}
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: yc-network-hdd
+        resources:
+          requests:
+            storage: 2Gi
