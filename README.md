@@ -134,6 +134,11 @@ HTML-отчёт JaCoCo:
 Backend CI запускается через GitHub Actions:
 - `.github/workflows/ci-backend.yml`
 - проверяет сборку, тесты и порог покрытия (`>= 80%`)
+- отдельный job `push-image` публикует Docker-образ в Yandex Container Registry (для `main`/`workflow_dispatch`)
+
+Для push в реестр нужны GitHub Secrets:
+- `YC_OAUTH_TOKEN`
+- `YC_REGISTRY_ID`
 
 ## Infra
 - Terraform: `infra/terraform/README.md`
