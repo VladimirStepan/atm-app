@@ -15,8 +15,8 @@ resources:
   - frontend-service.yaml
 images:
   - name: cr.yandex/REGISTRY_ID/atm-backend
-    newName: cr.yandex/REGISTRY_ID/atm-backend
-    newTag: latest
+    newName: cr.yandex/crpn65jsi8b7e4s9ibrl/atm-backend
+    newTag: 19d1da7
   - name: cr.yandex/REGISTRY_ID/atm-frontend
-    newName: cr.yandex/REGISTRY_ID/atm-frontend
-    newTag: latest
+    newName: cr.yandex/crpn65jsi8b7e4s9ibrl/atm-frontend
+    newTag: 19d1da7
