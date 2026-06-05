@@ -99,7 +99,7 @@ class AccountServiceTest {
 
         NotFoundException ex = assertThrows(NotFoundException.class, () -> accountService.getById(99L));
 
-        assertEquals("Account not found: id=99", ex.getMessage());
+        assertEquals("Account not found: id = 99", ex.getMessage());
         verify(accountRepository).findById(99L);
         verifyNoInteractions(accountMapper);
     }
@@ -164,7 +164,7 @@ class AccountServiceTest {
 
         NotFoundException ex = assertThrows(NotFoundException.class, () -> accountService.update(42L, request));
 
-        assertEquals("Account not found: id=42", ex.getMessage());
+        assertEquals("Account not found: id = 42", ex.getMessage());
         verify(accountRepository).findById(42L);
     }
 
@@ -183,6 +183,6 @@ class AccountServiceTest {
 
         NotFoundException ex = assertThrows(NotFoundException.class, () -> accountService.delete(5L));
 
-        assertEquals("Account not found: id=5", ex.getMessage());
+        assertEquals("Account not found: id = 5", ex.getMessage());
     }
 }
