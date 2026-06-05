@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: atm-lab3
+resources:
+  - namespace.yaml
+  - postgres-configmap.yaml
+  - postgres-service.yaml
+  - postgres-headless-service.yaml
+  - postgres-statefulset.yaml
+  - backend-configmap.yaml
+  - backend-deployment.yaml
+  - backend-service.yaml
+  - backend-hpa.yaml
+  - frontend-deployment.yaml
+  - frontend-service.yaml
+images:
+  - name: cr.yandex/REGISTRY_ID/atm-backend
+    newName: cr.yandex/REGISTRY_ID/atm-backend
+    newTag: latest
+  - name: cr.yandex/REGISTRY_ID/atm-frontend
+    newName: cr.yandex/REGISTRY_ID/atm-frontend
+    newTag: latest

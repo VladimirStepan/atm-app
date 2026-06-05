@@ -257,8 +257,14 @@ jobs:
           ref: main
 
       - name: Update Argo CD image tags
+        env:
+          YC_REGISTRY_ID: ${{ secrets.YC_REGISTRY_ID }}
         run: |
           SHORT_SHA="${GITHUB_SHA::7}"
+          test -n "${YC_REGISTRY_ID:-}" || (echo "Missing secret: YC_REGISTRY_ID" && exit 1)
+
+          sed -i "s|newName: cr.yandex/.*/atm-backend|newName: cr.yandex/${YC_REGISTRY_ID}/atm-backend|g" k8s/lab4/yc/kustomization.yaml
+          sed -i "s|newName: cr.yandex/.*/atm-frontend|newName: cr.yandex/${YC_REGISTRY_ID}/atm-frontend|g" k8s/lab4/yc/kustomization.yaml
           sed -i "s/newTag: .*/newTag: ${SHORT_SHA}/g" k8s/lab4/yc/kustomization.yaml
 
       - name: Commit GitOps manifest
