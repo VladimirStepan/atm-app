@@ -132,11 +132,11 @@ class AccountControllerTest {
 
     @Test
     void shouldReturn404WhenServiceThrowsNotFound() throws Exception {
-        when(accountService.getById(404L)).thenThrow(new NotFoundException("Account not found: id=404"));
+        when(accountService.getById(404L)).thenThrow(new NotFoundException("Account not found: id = 404"));
 
         mockMvc.perform(get("/api/v1/atm/404"))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.error").value("Account not found: id=404"));
+                .andExpect(jsonPath("$.error").value("Account not found: id = 404"));
     }
 
     @Test
@@ -158,10 +158,10 @@ class AccountControllerTest {
 
     @Test
     void deleteShouldReturn404WhenEntityMissing() throws Exception {
-        doThrow(new NotFoundException("Account not found: id=99")).when(accountService).delete(99L);
+        doThrow(new NotFoundException("Account not found: id = 99")).when(accountService).delete(99L);
 
         mockMvc.perform(delete("/api/v1/atm/99"))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.error").value("Account not found: id=99"));
+                .andExpect(jsonPath("$.error").value("Account not found: id = 99"));
     }
 }
