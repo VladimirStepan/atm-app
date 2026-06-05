@@ -25,7 +25,7 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
 
-    private static final String ACCOUNT_NOT_FOUND_MESSAGE = "Account not found: id=";
+    private static final String ACCOUNT_NOT_FOUND_MESSAGE = "Account not found: id = ";
     private static final String ACCOUNT_ALREADY_EXISTS_MESSAGE = "Account already exists: ownerName = ";
 
     @Transactional

@@ -157,14 +157,11 @@ jobs:
       - name: Validate SonarQube secrets
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
-          SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
           test -n "${SONAR_TOKEN:-}" || (echo "Missing secret: SONAR_TOKEN" && exit 1)
-          test -n "${SONAR_PROJECT_KEY:-}" || (echo "Missing secret: SONAR_PROJECT_KEY" && exit 1)
-          test -n "${SONAR_ORGANIZATION:-}" || (echo "Missing secret: SONAR_ORGANIZATION" && exit 1)
-          echo "SONAR_HOST_URL=${SONAR_HOST_URL:-https://sonarcloud.io}" >> "$GITHUB_ENV"
+          test -n "${SONAR_HOST_URL:-}" || (echo "Missing secret: SONAR_HOST_URL" && exit 1)
+          echo "SONAR_HOST_URL=${SONAR_HOST_URL}" >> "$GITHUB_ENV"
 
       - name: Backend tests + JaCoCo coverage
         working-directory: backend
@@ -182,15 +179,11 @@ jobs:
         working-directory: frontend
         run: npm test
 
-      - name: SonarQube Cloud scan and quality gate
+      - name: Self-hosted SonarQube scan and quality gate
         uses: SonarSource/sonarqube-scan-action@v7
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
-            -Dsonar.qualitygate.wait=true
+          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
 
   push-images:
     runs-on: ubuntu-latest

@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sonarqube
+  namespace: sonarqube
+  labels:
+    app: sonarqube
+spec:
+  serviceName: sonarqube
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarqube
+  template:
+    metadata:
+      labels:
+        app: sonarqube
+    spec:
+      initContainers:
+        - name: fix-permissions
+          image: busybox:1.37.0
+          command:
+            - sh
+            - -c
+            - chown -R 1000:1000 /opt/sonarqube/data /opt/sonarqube/extensions /opt/sonarqube/logs
+          volumeMounts:
+            - name: sonarqube-storage
+              mountPath: /opt/sonarqube/data
+              subPath: data
+            - name: sonarqube-storage
+              mountPath: /opt/sonarqube/extensions
+              subPath: extensions
+            - name: sonarqube-storage
+              mountPath: /opt/sonarqube/logs
+              subPath: logs
+      containers:
+        - name: sonarqube
+          image: sonarqube:lts-community
+          ports:
+            - name: http
+              containerPort: 9000
+          env:
+            - name: SONAR_ES_BOOTSTRAP_CHECKS_DISABLE
+              value: "true"
+            - name: SONAR_WEB_CONTEXT
+              value: /sonarqube
+          volumeMounts:
+            - name: sonarqube-storage
+              mountPath: /opt/sonarqube/data
+              subPath: data
+            - name: sonarqube-storage
+              mountPath: /opt/sonarqube/extensions
+              subPath: extensions
+            - name: sonarqube-storage
+              mountPath: /opt/sonarqube/logs
+              subPath: logs
+          readinessProbe:
+            httpGet:
+              path: /sonarqube/api/system/status
+              port: 9000
+            initialDelaySeconds: 90
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 12
+          livenessProbe:
+            httpGet:
+              path: /sonarqube/api/system/status
+              port: 9000
+            initialDelaySeconds: 180
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 6
+          resources:
+            requests:
+              cpu: 100m
+              memory: 1Gi
+            limits:
+              cpu: "1"
+              memory: 2Gi
+  volumeClaimTemplates:
+    - metadata:
+        name: sonarqube-storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: yc-network-hdd
+        resources:
+          requests:
+            storage: 5Gi
