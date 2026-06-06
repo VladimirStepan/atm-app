@@ -14,16 +14,20 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Map<String, String>> handleNotFound(NotFoundException ex) {
-        return ResponseEntity.status(404).body(Map.of("error", ex.getMessage()));
+        return ResponseEntity.status(404).body(errorBody(ex));
     }
 
     @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<Map<String, String>> handleAlreadyExists(AlreadyExistsException ex) {
-        return ResponseEntity.status(409).body(Map.of("error", ex.getMessage()));
+        return ResponseEntity.status(409).body(errorBody(ex));
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, String>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
-        return ResponseEntity.status(409).body(Map.of("error", ex.getMessage()));
+        return ResponseEntity.status(409).body(errorBody(ex));
+    }
+
+    private static Map<String, String> errorBody(Exception ex) {
+        return Map.of("error", ex.getMessage());
     }
 }
