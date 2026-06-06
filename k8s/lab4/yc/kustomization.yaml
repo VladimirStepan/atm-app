@@ -16,7 +16,7 @@ resources:
 images:
   - name: cr.yandex/REGISTRY_ID/atm-backend
     newName: cr.yandex/crpn65jsi8b7e4s9ibrl/atm-backend
-    newTag: 8032abe
+    newTag: b2bba0d
   - name: cr.yandex/REGISTRY_ID/atm-frontend
     newName: cr.yandex/crpn65jsi8b7e4s9ibrl/atm-frontend
-    newTag: 8032abe
+    newTag: b2bba0d
