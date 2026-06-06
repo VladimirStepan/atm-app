@@ -1,11 +1,15 @@
 import { currencyToId, type CurrencyCode } from './currency';
 
-function getAtmApiUrl() {
-	if (typeof window === 'undefined') {
+type BrowserLocation = Pick<Location, 'protocol' | 'hostname'>;
+
+export function getAtmApiUrl(location?: BrowserLocation) {
+	const currentLocation = location ?? (typeof window === 'undefined' ? undefined : window.location);
+
+	if (!currentLocation) {
 		return 'http://localhost:8084/api/v1/atm';
 	}
 
-	return `${window.location.protocol}//${window.location.hostname}:8084/api/v1/atm`;
+	return `${currentLocation.protocol}//${currentLocation.hostname}:8084/api/v1/atm`;
 }
 
 export const ATM_API_URL = getAtmApiUrl();

@@ -99,8 +99,8 @@ jobs:
       - name: Typecheck
         run: npm run check
 
-      - name: Test
-        run: npm test
+      - name: Test + Coverage >= 80%
+        run: npm run test:coverage
 
   frontend-build:
     runs-on: ubuntu-latest
@@ -175,9 +175,9 @@ jobs:
         working-directory: frontend
         run: npm run check
 
-      - name: Frontend tests
+      - name: Frontend tests + coverage
         working-directory: frontend
-        run: npm test
+        run: npm run test:coverage
 
       - name: Self-hosted SonarQube scan and quality gate
         uses: SonarSource/sonarqube-scan-action@v7

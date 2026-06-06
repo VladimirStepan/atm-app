@@ -7,6 +7,7 @@ import {
 	deleteAccount,
 	fetchAccount,
 	fetchAccounts,
+	getAtmApiUrl,
 	updateAccount
 } from '../src/lib/accounts';
 
@@ -40,6 +41,13 @@ describe('accounts API module', () => {
 
 		await expect(fetchAccounts()).resolves.toEqual([account]);
 		expect(fetchMock).toHaveBeenCalledWith(ATM_API_URL);
+	});
+
+	it('builds the ATM API URL from browser location', () => {
+		expect(getAtmApiUrl({
+			protocol: 'https:',
+			hostname: 'atm.example.test'
+		})).toBe('https://atm.example.test:8084/api/v1/atm');
 	});
 
 	it('loads a single account by id', async () => {
